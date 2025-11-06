@@ -225,11 +225,15 @@ WORKER_HTML = """
 def worker_ui():
     if not worker:
         return "Worker not initialized", 500
+
     uptime = time.time() - worker.start_time
     mode = 'ngrok' if worker.ngrok_url else 'local'
-    latest_anom = len(
-        [a for batch in processing_results for a in batch.get('ml_anomalies', [])]) if processing_results else 0
-    latest_slope = processing_results[-1].get('trend_slope') if processing_results else None
+
+    # Use worker's own ML state
+    current_anomalies = len(worker.ml.detect_anomalies())
+    slope, _ = worker.ml.predict_trend()
+    slope_str = f"{slope:.4f}" if slope is not None else "N/A"
+
     return render_template_string(
         WORKER_HTML,
         ip=worker.ip,
@@ -237,8 +241,8 @@ def worker_ui():
         uptime=round(uptime, 1),
         master=worker.master_url,
         mode=mode,
-        anomalies=latest_anom,
-        slope=f"{latest_slope:.4f}" if latest_slope else "N/A"
+        anomalies=current_anomalies,
+        slope=slope_str
     )
 
 
