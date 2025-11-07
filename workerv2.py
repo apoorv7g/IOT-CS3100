@@ -298,7 +298,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
     master_url = get_master_url(local_ip) if choice == '1' else input("Master URL (http/https): ").strip()
-    ngrok_url = get_ngrok_url() if choice == '2' else None
+    ngrok_url = get_ngrok_url() if choice == '4' else None
 
     worker = WorkerNode(master_url, ngrok_url)
 

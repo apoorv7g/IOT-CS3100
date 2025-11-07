@@ -456,7 +456,7 @@ async function refresh(){
     // ML Anomalies
     const anom = s.latest_result?.ml_anomalies || [];
     document.getElementById('anomalies').innerHTML = anom.length 
-        ? anom.map(a => `<div>Worker ${a.worker_id}: ${a.value} (score: ${a.score?.toFixed(2)||'?'})</div>`).join('')
+        ? anom.map(a => `<div>${a.value} (score: ${a.score?.toFixed(2)||'?'})</div>`).join('')
         : '<i>No anomalies detected</i>';
 
     // Logs
